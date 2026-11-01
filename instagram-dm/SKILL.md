@@ -20,6 +20,18 @@ Needs: Instagram logged in in the OpenClaw browser profile, `jq`, `zsh`. Scripts
 - Limits: only chats in the loaded inbox list (~10 most recent); photos show as `[photo/attachment]`; opening a chat marks it seen. For older chats, photos, polls or scrolling far back, use the browser: `action=text` on the Instagram tab (better than `snapshot`), scroll the thread up to lazy-load, and say how far back you checked.
 - Wakes from `ig-watch.sh` already contain the new messages. Don't re-read unless you need more context.
 
+## When a script stops working
+
+Instagram changes its web markup now and then. If `ig-chat.sh` returns nothing, `{}`, "no chat matching" for a chat you can see, or `?` as every sender, repair it instead of silently falling back:
+
+1. Confirm it's the page, not the setup: Instagram tab open and logged in (no login/checkpoint page), `openclaw browser tabs` works.
+2. Inspect the live page with `act evaluate` (read-only): find the new thread-list container, chat rows, message groups and sender labels. The current assumptions are listed in the comments of `ig-chat.sh` (`aria-label="Thread list"`, `div[role=button]` rows, `div[role=group]` messages, `React to message from <user>`).
+3. Back up the script (`cp ig-chat.sh ig-chat.sh.bak`), change only the selectors/parsing, keep the output format the same.
+4. Re-test `list`, `read "<a chat>" 5` and `changes`, and compare with what the browser shows.
+5. Tell the user in one line what broke and what you changed. If you can't fix it, restore the backup and tell them.
+
+Repairs only touch reading. Never change a script to send, react or delete, and never weaken the Gate above.
+
 ## Reply (plain text)
 
 The composer is a contenteditable `div[role=textbox]` that refs and `type` can't reach.

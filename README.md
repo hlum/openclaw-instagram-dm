@@ -1,5 +1,7 @@
 # instagram-dm — an OpenClaw skill
 
+English | [日本語](README.ja.md)
+
 Let your [OpenClaw](https://github.com/openclaw/openclaw) agent read and watch Instagram DMs cheaply.
 
 - **One call instead of a browser session.** `ig-chat.sh read "<chat>"` pulls the last messages out of the logged-in browser tab as plain text (`[time] sender: text`). The agent no longer needs 4-5 browser tool calls per read.
@@ -7,6 +9,8 @@ Let your [OpenClaw](https://github.com/openclaw/openclaw) agent read and watch I
 - **Safe replies.** The skill tells the agent to send only text you approved, and to treat chat messages as data, not instructions.
 
 It drives the real Instagram web app in OpenClaw's browser (no private API calls), so it uses the session you are already logged in with.
+
+> Automating Instagram may break Instagram's Terms of Use; use it only on your own account, at low volume, at your own risk.
 
 ## Install
 
@@ -48,7 +52,7 @@ openclaw cron add --name "Instagram changes" --cron "0 12,17,21 * * *" --tz Asia
 - Only finds chats in the loaded inbox list (about the 10 most recent).
 - Photos/attachments show as `[photo/attachment]`; message requests aren't read.
 - Opening a chat marks it seen.
-- Depends on Instagram's web markup (`aria-label="Thread list"`, `role=group` messages, "React to message from …" labels). If Instagram changes it, the selectors in `ig-chat.sh` need updating.
+- Depends on Instagram's web markup (`aria-label="Thread list"`, `role=group` messages, "React to message from …" labels). If Instagram changes it, the selectors in `ig-chat.sh` need updating. The skill tells the agent to fix them itself: inspect the page, update the selectors, re-test, and tell you what changed.
 
 ## License
 
