@@ -6,7 +6,7 @@
 set -u
 export PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH
 DIR=${0:A:h}
-STATE=${IG_STATE:-$HOME/.openclaw/workspace/data/instagram-dm.json}
+STATE=${IG_STATE:-$HOME/.openclaw/workspace/data/instagram-dm.json}; mkdir -p ${STATE:h}
 OC=(openclaw browser); [[ -n ${IG_BROWSER_PROFILE:-} ]] && OC+=(--browser-profile $IG_BROWSER_PROFILE)
 
 title=$($OC tabs --json 2>/dev/null | jq -r '[.tabs[] | select(.url | contains("instagram.com/direct")) | .title][0] // empty')

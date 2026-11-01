@@ -7,7 +7,7 @@
 # Env: IG_ME (your username, shown as "You"), IG_STATE (state file), IG_BROWSER_PROFILE (OpenClaw browser profile)
 set -u
 export PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH
-STATE=${IG_STATE:-$HOME/.openclaw/workspace/data/instagram-dm.json}
+STATE=${IG_STATE:-$HOME/.openclaw/workspace/data/instagram-dm.json}; mkdir -p ${STATE:h}
 INBOX=https://www.instagram.com/direct/inbox/
 ME=${IG_ME:-}
 OC=(openclaw browser); [[ -n ${IG_BROWSER_PROFILE:-} ]] && OC+=(--browser-profile $IG_BROWSER_PROFILE)
