@@ -18,7 +18,7 @@ ev() { $OC evaluate --target-id $id --fn "$1" 2>/dev/null; }
 
 # rows of the thread list: name, preview ("Active 3m ago" = no message preview, skipped)
 LIST='() => { const l=document.querySelector("[aria-label=\"Thread list\"]")||document; const o={};
-  for (const r of l.querySelectorAll("div[role=button]")) { const s=(r.innerText||"").split("\n");
+  for (const r of l.querySelectorAll("div[role=button]")) { const s=(r.innerText||"").split("\n"); if (s[0]==="Active") s.shift();   // "Active" badge row
     if (s.length>=4 && s.includes("·") && !/^Active /.test(s[1])) o[s[0]] ??= s[1]; }
   return o; }'
 
@@ -27,7 +27,7 @@ list() { ev $LIST; }
 read_chat() {  # $1 name substring, $2 count
   local q=$(jq -Rn --arg s "$1" '$s')
   local hit=$(ev "() => { const l=document.querySelector(\"[aria-label=\\\"Thread list\\\"]\")||document;
-    const r=[...l.querySelectorAll(\"div[role=button]\")].find(e=>(e.innerText||\"\").split(\"\n\")[0].includes($q));
+    const r=[...l.querySelectorAll(\"div[role=button]\")].find(e=>(e.innerText||\"\").split(\"\n\").slice(0,2).join(\" \").normalize(\"NFKC\").toLowerCase().includes($q.normalize(\"NFKC\").toLowerCase()));
     if (!r) return \"\"; r.click(); return r.innerText.split(\"\n\")[0]; }" | jq -r .)
   [[ -n $hit ]] || { echo "no chat matching \"$1\" in the inbox list"; return 1; }
   $OC wait --target-id $id --time 3500 >/dev/null 2>&1
